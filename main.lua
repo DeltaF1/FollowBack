@@ -82,9 +82,9 @@ function format(num)
 	if num < 10000 then
 		return s
 	elseif num < 1000000 then
-		return string.format("", num/1000).."K"
+		return string.format("%.1f", num/1000).."K"
 	elseif num < 1000000000 then
-		return tostring(num/1000000).."M"
+		return string.format("%.1f", num/1000000).."M"
 	end
 end
 
@@ -152,7 +152,7 @@ function love.load()
 	
 	objects:add(queue)
 	
-	names = {"John", "Kevin", "Shady", "Slim", "Hicks", "Jordan", "Edgy", "Naruto", "Real", "Davito"}
+	names = {"John", "Kevin", "Shady", "Slim", "Cena", "Danny", "Edgy", "Naruto", "Real", "Davito"}
 	
 	inputText = ""
 	
@@ -168,7 +168,7 @@ function love.keypressed(key)
 		--follow logic
 		
 		for i, v in ipairs(queue.items) do
-			if v.name == inputText then
+			if inputText == "@*" or v.name == inputText then --remove this later
 				queue:remove(v)
 				objects:add(v)
 				Timer.tween(0.5, v.pos, {y = -queue.spacing}, "linear",function() objects:remove(v) end)
@@ -177,7 +177,9 @@ function love.keypressed(key)
 			end
 		end
 		
-		inputText = ""
+		inputText = "@" 
+		--add penalty to wrong name?
+		
 	elseif key == "backspace" then
 		inputText = inputText:sub(1, #inputText - 1)
 	elseif key == "space" then
@@ -195,8 +197,8 @@ end
 
 function love.draw()
 	objects:draw()
-	
+	love.graphics.setColor(0,0,0,255)
 	love.graphics.print(inputText, 50, 500)
 	
-	love.graphics.print(love.mouse.getX().." , "..love.mouse.getY(), 0,0)
+	love.graphics.print("FPS: "..love.timer.getFPS(), 0,0)
 end
