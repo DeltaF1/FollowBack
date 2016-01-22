@@ -1,7 +1,10 @@
 Class = require "hump.class"
 vector = require "hump.vector"
 Timer = require "hump.timer"
+res = require "res"
+
 List = Class{}
+
 
 math.randomseed(os.time())
 math.randomseed(os.time())
@@ -144,7 +147,7 @@ function love.load()
 	
 	testIcon = love.graphics.newImage("assets/img/test.png")
 	
-	queue = Queue(vector(200,0), 15)
+	queue = Queue(vector(10,0), 15)
 	
 	queue:add(Bubble(vector(50,50), "@test", testIcon, 50))
 	queue:add(Bubble(vector(50,200), "@testTestTestTest", testIcon, 20000))
@@ -156,6 +159,13 @@ function love.load()
 	
 	inputText = ""
 	
+	local gameWidth, gameHeight = 600,700
+	
+	
+	local screenWidth, screenHeight = gameWidth, gameHeight
+	
+	res.set("fit", gameWidth, gameHeight, screenWidth, screenHeight)
+	love.window.setMode(screenWidth, screenHeight)
 end
 
 function love.textinput(t)
@@ -195,10 +205,15 @@ function love.update(dt)
 	Timer.update(dt)
 end
 
-function love.draw()
+function draw()
 	objects:draw()
 	love.graphics.setColor(0,0,0,255)
 	love.graphics.print(inputText, 50, 500)
 	
 	love.graphics.print("FPS: "..love.timer.getFPS(), 0,0)
+end
+
+function love.draw()
+	--replace with state drawing with hump.state for polish later
+	res.render(draw)
 end
